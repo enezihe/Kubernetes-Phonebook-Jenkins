@@ -26,8 +26,11 @@ pipeline {
                         env.NODERG = sh(script: 'terraform output -raw noderg', returnStdout:true).trim()
                     }
                     sh 'az aks get-credentials --resource-group ${RG_NAME} --name ${AKS_NAME}'
-                    sh "nsg_name=\$(az network nsg list --resource-group ${NODERG} --query \"[?contains(name, 'aks')].[name]\" --output tsv)"
-                    sh 'az network nsg rule create --nsg-name $nsg_name --resource-group ${NODERG} --name open30001 --access Allow --priority 100 --destination-port-ranges 30001-30002'
+                    sh """
+                        nsg_name=\$(az network nsg list --resource-group \${NODERG} --query '[?contains(name, \\'aks\\')].[name]' --output tsv)
+                        az network nsg rule create --nsg-name \$nsg_name --resource-group \${NODERG} --name open30001 --access Allow --priority 100 --destination-port-ranges 30001-30002
+                    """
+
                 }
             }
         }
