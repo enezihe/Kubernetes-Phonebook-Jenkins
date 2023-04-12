@@ -4,6 +4,9 @@ terraform {
     storage_account_name = "nbtteststorage"
     container_name       = "k8sjenkins"
     key                  = "terraform.tfstate"
+    use_msi = true
+     subscription_id = "fe0a3c7c-f676-4acb-91ac-89f5008cbba1"
+     tenant_id = "1a93b615-8d62-418a-ac28-22501cf1f978"
   }
   required_providers {
     azurerm = {
